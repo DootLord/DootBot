@@ -1,0 +1,26 @@
+{
+  "name": "cardvotebot",
+  "version": "1.0.0",
+  "description": "A Discord bot to allow for users to vote for if a a card should be added to a ban list or not.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ban",
+    "mtg",
+    "magic",
+    "the",
+    "gathering",
+    "card",
+    "cards"
+  ],
+  "author": "Shaun Porter",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.1",
+    "xhr-request": "^1.1.0"
+  }
+}
