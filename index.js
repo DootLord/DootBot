@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits, ChannelType, PermissionFlagsBits, PermissionsBitField } = require('discord.js');
 const { token } = require('./config.json');
 const request = require("xhr-request");
 
@@ -7,6 +7,7 @@ const scryfallAPIURL = "https://api.scryfall.com/cards/";
 const randomURL = "random?q=is%3Afunny+lang%3Aen+order%3Aedhrec&unique=cards&as=grid&order=random";
 const sidURL = "https://i.imgur.com/zLZer7q.png";
 // Create a new client instance
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, "MessageContent", "GuildMessages"] });
 
 // When the client is ready, run this code (only once)
@@ -20,18 +21,21 @@ client.on('messageCreate', async (message) => {
     // Non-generic commands
     switch(message.content.toLowerCase()) {
         case 'hey Doot Bot!':
-            message.reply("FUCK YOU " + message.author.username + "!");
+            return message.reply("FUCK YOU " + message.author.username + "!");
             break;
         case 'give me a random card!':
         case '!!random':
             const imageData = await getRandomImage();
-            message.reply(imageData.image_uris.normal);
+            return message.reply(imageData.image_uris.normal);
             break;
         case "show me sid!":
-            message.reply(sidURL);
+            return message.reply(sidURL);
             break;
         case "Vote for this card by reacting with :thumbsup: or :thumbsdown:":
-            addVoteEmojis(message)
+            return addVoteEmojis(message)
+            break;
+        case "!!init!!":
+            return initServer(message);
             break;
     }
 
@@ -53,6 +57,19 @@ client.on('messageCreate', async (message) => {
     }
 });
 
+
+function initServer(message) {
+
+        message.guild.channels.create({
+            name:"Card Vote", //Create a channel
+            type: ChannelType.GuildText, //Make sure the channel is a text channel
+            permissionOverwrites: [{ //Set permission overwrites
+                id: message.guild.roles.everyone, 
+                allow: [PermissionsBitField.Flags.AddReactions, PermissionsBitField.Flags.ViewChannel]
+            }]
+        });
+        message.channel.send("Channel Created!");
+}
 
 function addVoteEmojis(message) {
     message.react("👍");
